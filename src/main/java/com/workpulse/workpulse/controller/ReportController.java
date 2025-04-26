@@ -5,6 +5,8 @@ import com.workpulse.workpulse.dto.DailyAttendanceReportAdmin;
 import com.workpulse.workpulse.entity.User;
 import com.workpulse.workpulse.repository.UserRepository;
 import com.workpulse.workpulse.service.AttendanceReportService;
+import com.workpulse.workpulse.util.AttendanceExcelExporter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -78,6 +81,23 @@ public class ReportController {
 
         return "admin/report";
     }
+
+    @GetMapping("/admin/report/export/excel")
+    public void exportAttendanceReportToExcel(
+            @RequestParam(name = "date", required = false) LocalDate date,
+            HttpServletResponse response
+    ) throws IOException {
+        LocalDate targetDate = (date != null) ? date : LocalDate.now();
+        List<DailyAttendanceReportAdmin> reports = reportService.getAdminDailyReport(targetDate);
+
+        // Set header để tải file
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=attendance_report_" + targetDate + ".xlsx");
+
+        // Tạo file Excel
+        AttendanceExcelExporter.exportAdminReport(reports, response.getOutputStream());
+    }
+
 
     /**
      * DTO cho Employee report

@@ -11,6 +11,9 @@
     <form class="mb-3" th:action="@{/admin/report}" method="get">
         <input type="date" name="date" th:value="${reportDate}"/>
         <button class="btn btn-sm btn-primary">Lọc</button>
+        <a class="btn btn-sm btn-success" th:href="@{/admin/report/export/excel(date=${reportDate})}">
+            Xuất Excel
+        </a>
     </form>
 
     <div class="table-responsive">
@@ -37,6 +40,8 @@
             </tr>
             </tbody>
         </table>
+
+
     </div>
 </div>
 </body>
