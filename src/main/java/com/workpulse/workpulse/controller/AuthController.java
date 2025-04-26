@@ -11,8 +11,5 @@ public class AuthController {
         return "auth/login";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard/index"; // trang sau khi login thành công
-    }
+
 }

@@ -23,9 +23,9 @@ public class DailySummary {
     @Column(name = "summary_date", nullable = false)
     private LocalDate summaryDate;
 
-    private Integer totalActiveTime;
+    private Long totalActiveTime;
 
-    private Integer totalInactiveTime;
+    private Long totalInactiveTime;
 
     private String mostUsedApp;
 }

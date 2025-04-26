@@ -1,0 +1,62 @@
+<!-- templates/admin/report.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <title layout:fragment="title">Report</title>
+</head>
+<body>
+<!-- Gán tiêu đề trang vào header -->
+<div layout:fragment="pageTitle">BÁO CÁO NGÀY</div>
+
+<div layout:fragment="content">
+
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">Ngày <span th:text="${reportDate}">2025-04-26</span></h2>
+
+        <form class="flex flex-wrap items-center gap-4 mb-6" th:action="@{/admin/report}" method="get">
+            <input type="date" name="date" th:value="${reportDate}"
+                   class="border border-gray-300 rounded px-4 py-2 focus:ring focus:border-blue-400">
+            <button type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Lọc
+            </button>
+            <a class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+               th:href="@{/admin/report/export/excel(date=${reportDate})}">
+                Xuất Excel
+            </a>
+        </form>
+    </div>
+
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nhân viên</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bắt đầu</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kết thúc</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng (giờ)</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <tr th:each="r : ${reports}" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${r.fullName}">Nguyễn Văn A</td>
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${r.workDate}">2025-04-26</td>
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${#temporals.format(r.firstStartTime, 'HH:mm:ss')}">08:00:00</td>
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${#temporals.format(r.lastEndTime, 'HH:mm:ss')}">17:30:00</td>
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${r.totalWorkHours != null ? #numbers.formatDecimal(r.totalWorkHours, 1, 2, 'POINT') : '0.00'}">9.50</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reports)}">
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                    Không có dữ liệu
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

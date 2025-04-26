@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title layout:fragment="title">Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex h-screen bg-gray-100 font-sans">
+
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-lg"
+       layout:fragment="sidebar">
+    <div class="p-6 text-xl font-bold text-blue-600">
+        MyApp Admin
+    </div>
+    <nav class="mt-6">
+        <a th:href="@{/admin/dashboard}"
+           class="block px-6 py-3 mb-2 rounded hover:bg-blue-100">
+            Dashboard
+        </a>
+        <a th:href="@{/admin/report}"
+           class="block px-6 py-3 mb-2 rounded hover:bg-blue-100">
+            Báo cáo chấm công
+        </a>
+        <a th:href="@{/admin/users}"
+           class="block px-6 py-3 mb-2 rounded hover:bg-blue-100">
+            Quản lý người dùng
+        </a>
+    </nav>
+</aside>
+
+<!-- Main content wrapper -->
+<div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between bg-white shadow px-6 py-4"
+            layout:fragment="header">
+        <div class="flex items-center">
+            <button id="btn-sidebar-toggle"
+                    class="mr-4 text-gray-600 hover:text-gray-800 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <h1 class="text-2xl font-semibold" layout:fragment="pageTitle">Page Title</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="relative">
+                <button class="flex items-center space-x-2 focus:outline-none">
+                    <img src="/images/avatar.png" alt="avatar"
+                         class="w-8 h-8 rounded-full">
+                    <span th:text="${#authentication.name}" class="font-medium">Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="flex-1 overflow-auto p-6" layout:fragment="content">
+        <!-- Nội dung trang con -->
+    </main>
+</div>
+
+<script>
+    const btn = document.getElementById('btn-sidebar-toggle');
+    const sidebar = document.querySelector('aside');
+    btn.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+    });
+</script>
+</body>
+</html>
