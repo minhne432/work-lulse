@@ -20,23 +20,16 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. UserDetailsService (bạn tự implement)
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService();
-        // CustomUserDetailsService implements UserDetailsService, loadUserByUsername từ DB
-    }
-
     // 3. AuthenticationProvider
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(
-            UserDetailsService uds,
-            PasswordEncoder encoder) {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(uds);
-        auth.setPasswordEncoder(encoder);
-        return auth;
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+                                                            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
     }
+
 
     // 4. Security filter chain
     @Bean
