@@ -1,34 +1,144 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+      lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Đăng nhập</title>
+  <!-- Bootstrap 5 CSS -->
   <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+  <style>
+    body {
+      background: #f5f5f5;
+    }
+    .card-login {
+      max-width: 400px;
+      margin: 5% auto;
+      padding: 1.5rem;
+      border-radius: .75rem;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+      background: #fff;
+    }
+    .toggle-password {
+      cursor: pointer;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+    }
+  </style>
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100">
-<div class="card p-4" style="width: 350px;">
-  <h3 class="card-title text-center mb-3">Đăng nhập</h3>
+<body>
+
+<div class="card card-login">
+  <h4 class="text-center mb-4">MyApp System</h4>
+
+  <!-- Hiển thị lỗi login -->
+  <div th:if="${param.error}" class="alert alert-danger px-3 py-2">
+    Sai tên đăng nhập hoặc mật khẩu!
+  </div>
+  <div th:if="${param.logout}" class="alert alert-success px-3 py-2">
+    Bạn đã đăng xuất thành công.
+  </div>
+
+  <!-- Form đăng nhập -->
   <form th:action="@{/perform_login}" method="post">
-    <div th:if="${param.error}" class="alert alert-danger">
-      Sai tên đăng nhập hoặc mật khẩu!
-    </div>
-    <div th:if="${param.logout}" class="alert alert-success">
-      Bạn đã đăng xuất thành công.
-    </div>
+    <!-- CSRF token -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
     <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" name="username" id="username"
-             class="form-control" required autofocus/>
+      <label for="username" class="form-label">Tên đăng nhập</label>
+      <input type="text"
+             id="username"
+             name="username"
+             class="form-control"
+             placeholder="Nhập username"
+             required
+             autofocus>
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" name="password" id="password"
-             class="form-control" required/>
+
+    <div class="mb-3 position-relative">
+      <label for="password" class="form-label">Mật khẩu</label>
+      <input type="password"
+             id="password"
+             name="password"
+             class="form-control"
+             placeholder="Nhập mật khẩu"
+             required>
+      <span class="toggle-password" onclick="togglePassword()">
+          <i id="eyeIcon" class="bi bi-eye-fill"></i>
+        </span>
     </div>
-    <button type="submit" class="btn btn-primary w-100">Login</button>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input"
+             type="checkbox"
+             name="remember-me"
+             id="rememberMe">
+      <label class="form-check-label" for="rememberMe">
+        Ghi nhớ đăng nhập
+      </label>
+    </div>
+
+    <div class="d-grid mb-3">
+      <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    </div>
+
+    <div class="text-center">
+      <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal">
+        Quên mật khẩu?
+      </a>
+    </div>
   </form>
 </div>
+
+<!-- Modal Quên mật khẩu -->
+<div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form th:action="@{/forgot-password}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="forgotModalLabel">Reset mật khẩu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email của bạn</label>
+            <input type="email"
+                   id="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="Nhập email để nhận link"
+                   required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Gửi link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 JS & Icons CDN -->
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.js"></script>
+<script>
+  // Toggle show/hide password
+  function togglePassword() {
+    const pwd = document.getElementById('password');
+    const eye = document.getElementById('eyeIcon');
+    if (pwd.type === 'password') {
+      pwd.type = 'text';
+      eye.className = 'bi bi-eye-slash-fill';
+    } else {
+      pwd.type = 'password';
+      eye.className = 'bi bi-eye-fill';
+    }
+  }
+</script>
+
 </body>
 </html>

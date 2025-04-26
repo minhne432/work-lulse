@@ -20,6 +20,11 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    private final RoleBasedSuccessHandler successHandler;
+
+    public WebSecurityConfig(RoleBasedSuccessHandler successHandler) {
+        this.successHandler = successHandler;
+    }
     // 3. AuthenticationProvider
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
@@ -44,7 +49,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .successHandler(successHandler)        // <-- updated
                         .failureUrl("/login?error")
                         .permitAll()
                 )
