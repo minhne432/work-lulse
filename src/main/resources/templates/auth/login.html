@@ -1,23 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="vi">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Đăng nhập</title>
-  <!-- Bootstrap 5 CSS -->
-  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     body {
       background: #f5f5f5;
-    }
-    .card-login {
-      max-width: 400px;
-      margin: 5% auto;
-      padding: 1.5rem;
-      border-radius: .75rem;
-      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-      background: #fff;
     }
     .toggle-password {
       cursor: pointer;
@@ -25,117 +18,122 @@
       right: 1rem;
       top: 50%;
       transform: translateY(-50%);
-      color: #6c757d;
+      color: #6b7280; /* Tailwind Gray-500 */
     }
   </style>
 </head>
-<body>
 
-<div class="card card-login">
-  <h4 class="text-center mb-4">MyApp System</h4>
+<body class="flex items-center justify-center min-h-screen">
+
+<div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+  <h4 class="text-center text-2xl font-semibold mb-6">MyApp System</h4>
 
   <!-- Hiển thị lỗi login -->
-  <div th:if="${param.error}" class="alert alert-danger px-3 py-2">
+  <div th:if="${param.error}" class="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
     Sai tên đăng nhập hoặc mật khẩu!
   </div>
-  <div th:if="${param.logout}" class="alert alert-success px-3 py-2">
+  <div th:if="${param.logout}" class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
     Bạn đã đăng xuất thành công.
   </div>
 
   <!-- Form đăng nhập -->
-  <form th:action="@{/perform_login}" method="post">
-    <!-- CSRF token -->
+  <form th:action="@{/perform_login}" method="post" class="space-y-4">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    <div class="mb-3">
-      <label for="username" class="form-label">Tên đăng nhập</label>
+    <div>
+      <label for="username" class="block mb-1 font-medium">Tên đăng nhập</label>
       <input type="text"
              id="username"
              name="username"
-             class="form-control"
              placeholder="Nhập username"
              required
-             autofocus>
+             autofocus
+             class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
     </div>
 
-    <div class="mb-3 position-relative">
-      <label for="password" class="form-label">Mật khẩu</label>
+    <div class="relative">
+      <label for="password" class="block mb-1 font-medium">Mật khẩu</label>
       <input type="password"
              id="password"
              name="password"
-             class="form-control"
              placeholder="Nhập mật khẩu"
-             required>
+             required
+             class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
       <span class="toggle-password" onclick="togglePassword()">
-          <i id="eyeIcon" class="bi bi-eye-fill"></i>
-        </span>
+        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 16 16">
+          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.07-.122.152-.195.246a13.133 13.133 0 0 1-1.66 2.043C11.88 11.332 10.12 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.133 13.133 0 0 1 1.172 8z"/>
+          <path d="M8 5.5A2.5 2.5 0 1 0 8 10a2.5 2.5 0 0 0 0-4.5zM8 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </svg>
+      </span>
     </div>
 
-    <div class="form-check mb-3">
-      <input class="form-check-input"
-             type="checkbox"
-             name="remember-me"
-             id="rememberMe">
-      <label class="form-check-label" for="rememberMe">
-        Ghi nhớ đăng nhập
-      </label>
+    <div class="flex items-center">
+      <input id="rememberMe" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+      <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Ghi nhớ đăng nhập</label>
     </div>
 
-    <div class="d-grid mb-3">
-      <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    <div>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
+        Đăng nhập
+      </button>
     </div>
 
-    <div class="text-center">
-      <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal">
-        Quên mật khẩu?
-      </a>
+    <div class="text-center mt-4">
+      <a href="#" data-modal-toggle="forgotModal" class="text-blue-600 hover:underline">Quên mật khẩu?</a>
     </div>
   </form>
 </div>
 
 <!-- Modal Quên mật khẩu -->
-<div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form th:action="@{/forgot-password}" method="post">
-        <div class="modal-header">
-          <h5 class="modal-title" id="forgotModalLabel">Reset mật khẩu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email của bạn</label>
-            <input type="email"
-                   id="email"
-                   name="email"
-                   class="form-control"
-                   placeholder="Nhập email để nhận link"
-                   required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-          <button type="submit" class="btn btn-primary">Gửi link</button>
-        </div>
-      </form>
-    </div>
+<div id="forgotModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+    <form th:action="@{/forgot-password}" method="post">
+      <div class="flex justify-between items-center mb-4">
+        <h5 class="text-xl font-semibold">Reset mật khẩu</h5>
+        <button type="button" onclick="toggleModal(false)" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+      </div>
+      <div class="mb-4">
+        <label for="email" class="block mb-1 font-medium">Email của bạn</label>
+        <input type="email"
+               id="email"
+               name="email"
+               placeholder="Nhập email để nhận link"
+               required
+               class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="button" onclick="toggleModal(false)" class="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400">Hủy</button>
+        <button type="submit" class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Gửi link</button>
+      </div>
+    </form>
   </div>
 </div>
 
-<!-- Bootstrap 5 JS & Icons CDN -->
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.js"></script>
 <script>
   // Toggle show/hide password
   function togglePassword() {
     const pwd = document.getElementById('password');
-    const eye = document.getElementById('eyeIcon');
+    const eyeIcon = document.getElementById('eyeIcon');
     if (pwd.type === 'password') {
       pwd.type = 'text';
-      eye.className = 'bi bi-eye-slash-fill';
+      eyeIcon.innerHTML = `
+        <path d="M13.359 11.238l2.122 2.121-1.415 1.415-2.121-2.122A7.963 7.963 0 0 1 8 14c-5 0-8-6-8-6a16.569 16.569 0 0 1 2.454-3.252l1.528 1.528C3.368 6.95 2.619 7.903 2.619 7.903s3 4 5.381 4c.878 0 1.7-.272 2.381-.734l1.978 1.978z"/>
+        <path d="M1.528 1.528l13.944 13.944-1.414 1.414L0 2.942 1.528 1.528z"/>`;
     } else {
       pwd.type = 'password';
-      eye.className = 'bi bi-eye-fill';
+      eyeIcon.innerHTML = `
+        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.07-.122.152-.195.246a13.133 13.133 0 0 1-1.66 2.043C11.88 11.332 10.12 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.133 13.133 0 0 1 1.172 8z"/>
+        <path d="M8 5.5A2.5 2.5 0 1 0 8 10a2.5 2.5 0 0 0 0-4.5zM8 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>`;
+    }
+  }
+
+  // Modal show/hide
+  function toggleModal(show = true) {
+    const modal = document.getElementById('forgotModal');
+    if (show) {
+      modal.classList.remove('hidden');
+    } else {
+      modal.classList.add('hidden');
     }
   }
 </script>
