@@ -1,0 +1,43 @@
+<!-- templates/admin/report.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Báo cáo chấm công Admin</title>
+</head>
+<body>
+<div>
+    <h2>Báo cáo ngày <span th:text="${reportDate}">2025-04-26</span></h2>
+
+    <form class="mb-3" th:action="@{/admin/report}" method="get">
+        <input type="date" name="date" th:value="${reportDate}"/>
+        <button class="btn btn-sm btn-primary">Lọc</button>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nhân viên</th>
+                <th>Ngày</th>
+                <th>Start đầu</th>
+                <th>End cuối</th>
+                <th>Tổng (giờ)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r : ${reports}">
+                <td th:text="${r.fullName}">Nguyễn Văn A</td>
+                <td th:text="${r.workDate}">2025-04-26</td>
+                <td th:text="${#temporals.format(r.firstStartTime, 'HH:mm:ss')}">08:00:00</td>
+                <td th:text="${#temporals.format(r.lastEndTime, 'HH:mm:ss')}">17:30:00</td>
+                <td th:text="${r.totalWorkHours != null ? #numbers.formatDecimal(r.totalWorkHours, 1, 2, 'POINT') : '0.00'}">9.50</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reports)}">
+                <td colspan="5" class="text-center">Không có dữ liệu</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

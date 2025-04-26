@@ -35,7 +35,7 @@ public class ActivityLog {
     private LocalDateTime endTime;
 
     @Column
-    private Integer durationSeconds;
+    private Long durationSeconds;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

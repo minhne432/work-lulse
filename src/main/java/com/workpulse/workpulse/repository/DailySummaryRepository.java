@@ -1,14 +1,16 @@
 package com.workpulse.workpulse.repository;
 
+import com.workpulse.workpulse.entity.DailySummary;
+import com.workpulse.workpulse.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import com.workpulse.workpulse.entity.DailySummary;
-
-@Repository
 public interface DailySummaryRepository extends JpaRepository<DailySummary, Long> {
-    // Lấy summary theo user và ngày
-    Optional<DailySummary> findByUserIdAndSummaryDate(Long userId, LocalDate date);
+    // Lấy summary của user theo ngày
+    Optional<DailySummary> findByUserAndSummaryDate(User user, LocalDate summaryDate);
+
+    // Lấy list summary giữa 2 ngày (dùng cho admin report)
+    List<DailySummary> findBySummaryDateBetween(LocalDate start, LocalDate end);
 }
